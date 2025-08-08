@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { getSuggestions } from '@/lib/actions';
 import { Textarea } from './ui/textarea';
 import { useEffect, useRef, useState } from 'react';
@@ -24,7 +24,7 @@ const emergencyServices = [
 
 export function HomeView() {
   const { toast } = useToast();
-  const [state, formAction] = useFormState(getSuggestions, { solutions: [] });
+  const [state, formAction] = useActionState(getSuggestions, { solutions: [] });
   const [description, setDescription] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
