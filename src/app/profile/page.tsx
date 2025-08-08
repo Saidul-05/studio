@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 
 const quickActions = [
     { name: 'Vehicles', icon: <Icons.car className="h-6 w-6 text-primary" /> },
@@ -46,6 +46,25 @@ const recentServices = [
 
 
 export default function ProfilePage() {
+    const [avatarSrc, setAvatarSrc] = useState('https://placehold.co/100x100.png');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+  
+    const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            setAvatarSrc(e.target.result as string);
+          }
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    };
+  
+    const handleEditClick = () => {
+      fileInputRef.current?.click();
+    };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <header className="sticky top-0 bg-white shadow-sm z-10 p-4">
@@ -61,7 +80,7 @@ export default function ProfilePage() {
         <Card className="p-4 shadow-md rounded-xl bg-white">
             <div className='flex items-center gap-4'>
                 <Avatar className="h-16 w-16">
-                    <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="person face" />
+                    <AvatarImage src={avatarSrc} data-ai-hint="person face" />
                     <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 <div className='flex-grow'>
@@ -69,7 +88,14 @@ export default function ProfilePage() {
                     <p className='text-sm text-gray-500'>Premium Member</p>
                     <Badge className='mt-1 bg-blue-100 text-blue-800 border-blue-200'>Verified Account</Badge>
                 </div>
-                <Button variant="ghost" size="icon" className='bg-gray-100'>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                    accept="image/*"
+                />
+                <Button variant="ghost" size="icon" className='bg-gray-100' onClick={handleEditClick}>
                     <Icons.pencil className='h-5 w-5'/>
                 </Button>
             </div>
