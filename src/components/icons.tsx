@@ -115,4 +115,74 @@ export const Icons = {
   arrowLeft: ArrowLeft,
   search: Search,
   clock: Clock,
+  towTruck: (props: SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M14 12V8H2v4" />
+      <path d="M2 12v4h12v-4" />
+      <path d="m14 16 2-2 2 2" />
+      <path d="M18 10V4a2 2 0 0 1 2-2h2" />
+      <path d="M22 8h-4" />
+      <path d="M10 16h4" />
+      <circle cx="4" cy="18" r="2" />
+      <circle cx="16" cy="18" r="2" />
+    </svg>
+  ),
+  battery: (props: SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect x="2" y="7" width="20" height="12" rx="2" ry="2" />
+      <line x1="6" y1="13" x2="6" y2="13" />
+      <line x1="10" y1="13" x2="10" y2="13" />
+      <line x1="14" y1="13" x2="14" y2="13" />
+      <line x1="18" y1="13" x2="18" y2="13" />
+      <line x1="7" y1="7" x2="7" y2="5" />
+      <line x1="17" y1="7" x2="17" y2="5" />
+    </svg>
+  ),
+  carTire: (props: SVGProps<SVGSVGElement>) => (
+     <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="4" />
+        <line x1="12" y1="2" x2="12" y2="4" />
+        <line x1="12" y1="20" x2="12" y2="22" />
+        <line x1="22" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="12" x2="2" y2="12" />
+        <line x1="18.36" y1="5.64" x2="16.95" y2="7.05" />
+        <line x1="7.05" y1="16.95" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="18.36" x2="16.95" y2="16.95" />
+        <line x1="7.05" y1="7.05" x2="5.64" y2="5.64" />
+     </svg>
+  ),
 };
