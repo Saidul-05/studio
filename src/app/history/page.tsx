@@ -7,13 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import React from 'react';
 
-const serviceHistory = [
+const serviceHistoryData = [
   {
-    date: 'April 24, 2025',
-    time: '02:15 PM',
+    date: new Date('2025-04-24T14:15:00'),
     service: 'Towing Service',
     location: '123 Main Street, New York, NY',
     mechanic: 'Michael Johnson',
@@ -25,8 +25,7 @@ const serviceHistory = [
     iconBg: 'bg-blue-500',
   },
   {
-    date: 'April 18, 2025',
-    time: '09:30 AM',
+    date: new Date('2025-04-18T09:30:00'),
     service: 'Battery Jump',
     location: '456 Park Avenue, New York, NY',
     mechanic: 'Sarah Williams',
@@ -38,8 +37,7 @@ const serviceHistory = [
     iconBg: 'bg-blue-500',
   },
   {
-    date: 'April 10, 2025',
-    time: '11:45 AM',
+    date: new Date('2025-04-10T11:45:00'),
     service: 'Tire Change',
     location: '789 Broadway, New York, NY',
     mechanic: 'Robert Chen',
@@ -51,8 +49,7 @@ const serviceHistory = [
     iconBg: 'bg-blue-500',
   },
   {
-    date: 'March 30, 2025',
-    time: '04:20 PM',
+    date: new Date('2025-03-30T16:20:00'),
     service: 'Towing Service',
     location: '555 Fifth Avenue, New York, NY',
     mechanic: 'Jessica Brown',
@@ -82,6 +79,34 @@ const StarRating = ({ rating }: { rating: number }) => (
   );
 
 export default function HistoryPage() {
+  const { toast } = useToast();
+  const [timeFilter, setTimeFilter] = React.useState('all-time');
+  const [serviceFilter, setServiceFilter] = React.useState('all-services');
+  
+  const handleReview = () => {
+    toast({
+        title: "Success",
+        description: "Thank you for your review!",
+    })
+  }
+
+  const filteredHistory = serviceHistoryData.filter(item => {
+    const now = new Date();
+    let matchesTime = true;
+    if (timeFilter === 'last-30-days') {
+        const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+        matchesTime = item.date > thirtyDaysAgo;
+    } else if (timeFilter === 'last-90-days') {
+        const ninetyDaysAgo = new Date(now.setDate(now.getDate() - 90));
+        matchesTime = item.date > ninetyDaysAgo;
+    }
+    
+    const matchesService = serviceFilter === 'all-services' || item.service.toLowerCase().includes(serviceFilter);
+
+    return matchesTime && matchesService;
+  })
+
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <header className="sticky top-0 bg-white shadow-sm z-10 p-4">
@@ -107,7 +132,7 @@ export default function HistoryPage() {
           <h2 className="text-2xl font-bold">Service History</h2>
         </div>
         <div className="flex gap-2 mb-4">
-            <Select defaultValue="all-time">
+            <Select value={timeFilter} onValueChange={setTimeFilter}>
                 <SelectTrigger className="w-[140px] bg-white">
                     <SelectValue placeholder="All Time" />
                 </SelectTrigger>
@@ -117,7 +142,7 @@ export default function HistoryPage() {
                     <SelectItem value="last-90-days">Last 90 Days</SelectItem>
                 </SelectContent>
             </Select>
-            <Select defaultValue="all-services">
+            <Select value={serviceFilter} onValueChange={setServiceFilter}>
                 <SelectTrigger className="w-[140px] bg-white">
                     <SelectValue placeholder="All Services" />
                 </SelectTrigger>
@@ -131,10 +156,10 @@ export default function HistoryPage() {
         </div>
 
         <div className="space-y-4">
-          {serviceHistory.map((item, index) => (
+          {filteredHistory.map((item, index) => (
             <Card key={index} className="p-4 shadow-md rounded-xl bg-white">
               <div className="text-sm text-gray-500 mb-2">
-                {item.date} • {item.time}
+                {item.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {item.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
               </div>
               <div className="flex gap-4">
                 <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
@@ -173,7 +198,7 @@ export default function HistoryPage() {
                     {item.rating ? (
                         <StarRating rating={item.rating} />
                     ) : item.status === 'Completed' ? (
-                        <Button variant="outline" size="sm" className="mt-1">Leave Review</Button>
+                        <Button variant="outline" size="sm" className="mt-1" onClick={handleReview}>Leave Review</Button>
                     ) : null}
                 </div>
               </div>

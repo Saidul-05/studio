@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import Image from 'next/image';
 import { Icons } from './icons';
 import React from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 const dates = ['April 16', 'April 17', 'April 18'];
 const timeSlots = ['09:00 AM', '11:30 AM', '02:00 PM', '04:30 PM', '06:00 PM'];
@@ -40,8 +41,16 @@ type BookServiceDialogProps = {
 };
 
 export function BookServiceDialog({ service }: BookServiceDialogProps) {
+  const { toast } = useToast();
   const [selectedDate, setSelectedDate] = React.useState(dates[0]);
   const [selectedTime, setSelectedTime] = React.useState(timeSlots[0]);
+
+  const handleConfirmBooking = () => {
+    toast({
+        title: "Booking Confirmed!",
+        description: `Your booking for ${service.name} on ${selectedDate} at ${selectedTime} is confirmed.`,
+    })
+  }
 
   return (
     <DialogContent className="sm:max-w-[425px] p-0">
@@ -55,7 +64,7 @@ export function BookServiceDialog({ service }: BookServiceDialogProps) {
             </DialogClose>
         </div>
       </DialogHeader>
-      <div className="px-6 space-y-4">
+      <div className="px-6 space-y-4 max-h-[70vh] overflow-y-auto">
         <div className="flex items-center gap-4">
           <Image
             src={service.icon}
@@ -133,7 +142,9 @@ export function BookServiceDialog({ service }: BookServiceDialogProps) {
 
       </div>
       <DialogFooter className="bg-gray-50 p-6 flex-col gap-2">
-        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Confirm Booking</Button>
+        <DialogClose asChild>
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleConfirmBooking}>Confirm Booking</Button>
+        </DialogClose>
         <DialogClose asChild>
             <Button variant="ghost" className="w-full">Cancel</Button>
         </DialogClose>

@@ -18,7 +18,7 @@ const mechanics = [
     rating: 4.8,
     reviews: 124,
     distance: 0.8,
-    services: ['Engine Repair', 'Diagnostics'],
+    services: ['Engine Repair', 'Diagnostics', 'Repairs'],
     hours: '8:00 AM - 6:00 PM',
     available: true,
     image: 'https://placehold.co/100x100.png',
@@ -30,7 +30,7 @@ const mechanics = [
     rating: 4.9,
     reviews: 89,
     distance: 1.2,
-    services: ['Luxury Vehicles', 'Electrical Systems'],
+    services: ['Luxury Vehicles', 'Electrical Systems', 'EV Service'],
     hours: '7:30 AM - 8:00 PM',
     available: true,
     image: 'https://placehold.co/100x100.png',
@@ -42,13 +42,37 @@ const mechanics = [
     rating: 4.5,
     reviews: 210,
     distance: 2.1,
-    services: ['Tire Change', 'Alignment'],
+    services: ['Tire Change', 'Alignment', 'Tires'],
     hours: '9:00 AM - 5:00 PM',
     available: false,
     image: 'https://placehold.co/100x100.png',
     lat: 40.7158,
     lng: -73.996,
   },
+  {
+    name: 'Tow & Go',
+    rating: 4.7,
+    reviews: 150,
+    distance: 3.5,
+    services: ['Towing', 'Roadside Assistance'],
+    hours: '24/7',
+    available: true,
+    image: 'https://placehold.co/100x100.png',
+    lat: 40.705,
+    lng: -74.011,
+  },
+  {
+    name: 'Battery Masters',
+    rating: 4.6,
+    reviews: 180,
+    distance: 4.1,
+    services: ['Battery', 'Jump Start', 'Replacement'],
+    hours: '6:00 AM - 10:00 PM',
+    available: true,
+    image: 'https://placehold.co/100x100.png',
+    lat: 40.725,
+    lng: -73.985,
+  }
 ];
 
 const filterCategories = ['All', 'Towing', 'Repairs', 'Tires', 'Battery', 'EV Service'];
@@ -56,6 +80,14 @@ const filterCategories = ['All', 'Towing', 'Repairs', 'Tires', 'Battery', 'EV Se
 export default function ExplorePage() {
   const [viewMode, setViewMode] = React.useState('Map View');
   const [activeCategory, setActiveCategory] = React.useState('All');
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [selectedMechanic, setSelectedMechanic] = React.useState<typeof mechanics[0] | null>(null);
+
+  const filteredMechanics = mechanics.filter(mechanic => {
+    const matchesCategory = activeCategory === 'All' || mechanic.services.includes(activeCategory);
+    const matchesSearch = mechanic.name.toLowerCase().includes(searchTerm.toLowerCase()) || mechanic.services.join(' ').toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
@@ -81,6 +113,8 @@ export default function ExplorePage() {
             <Input
               placeholder="Search mechanics, services..."
               className="pl-10 bg-gray-100 border-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2">
                 <Icons.sliders className="h-5 w-5 text-gray-500" />
@@ -126,9 +160,10 @@ export default function ExplorePage() {
                 defaultCenter={{ lat: 40.7128, lng: -74.006 }}
                 defaultZoom={13}
                 mapId="RESQ_AUTO_MAP"
+                gestureHandling={'greedy'}
               >
-                {mechanics.map((m) => (
-                  <Marker key={m.name} position={{ lat: m.lat, lng: m.lng }} />
+                {filteredMechanics.map((m) => (
+                  <Marker key={m.name} position={{ lat: m.lat, lng: m.lng }} onClick={() => setSelectedMechanic(m)} />
                 ))}
               </Map>
             </div>
@@ -137,11 +172,11 @@ export default function ExplorePage() {
           <div className={`p-4 space-y-4 ${viewMode === 'Map View' ? 'absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-lg' : ''}`}>
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold">Nearby Mechanics</h2>
-              <span className="text-sm text-gray-500">{mechanics.length} found</span>
+              <span className="text-sm text-gray-500">{filteredMechanics.length} found</span>
             </div>
             <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-500px)]">
-              {mechanics.map((mechanic) => (
-                <Card key={mechanic.name} className="p-3 shadow-md rounded-xl">
+              {filteredMechanics.map((mechanic) => (
+                <Card key={mechanic.name} className={`p-3 shadow-md rounded-xl ${selectedMechanic?.name === mechanic.name ? 'border-primary' : ''}`} onClick={() => setSelectedMechanic(mechanic)}>
                   <div className="flex gap-4">
                     <Image
                       src={mechanic.image}
@@ -164,7 +199,7 @@ export default function ExplorePage() {
                         <span>{mechanic.distance} km</span>
                       </div>
                       <div className="flex gap-2 mt-2">
-                        {mechanic.services.map(s => <Badge key={s} variant="secondary">{s}</Badge>)}
+                        {mechanic.services.slice(0, 2).map(s => <Badge key={s} variant="secondary">{s}</Badge>)}
                       </div>
                       <div className="flex justify-between items-center mt-2">
                         <div className="flex items-center text-sm text-gray-500">
