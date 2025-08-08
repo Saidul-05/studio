@@ -187,6 +187,15 @@ export default function ProfilePage() {
                     <Icons.chevronRight className="h-5 w-5 text-gray-400"/>
                 </div>
             </Link>
+             <Link href="/admin" className="w-full">
+                <div className="flex items-center justify-between py-2 mt-2 border-t pt-3">
+                    <div className="flex items-center gap-3">
+                        <Icons.shield className="h-5 w-5 text-gray-600"/>
+                        <span className="font-medium">Admin Panel</span>
+                    </div>
+                    <Icons.chevronRight className="h-5 w-5 text-gray-400"/>
+                </div>
+            </Link>
         </Card>
 
       </main>
