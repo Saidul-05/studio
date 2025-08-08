@@ -1,4 +1,4 @@
-import { Bell, Calendar, Compass, History, Home, MapPin, User, Wrench, type SVGProps } from "lucide-react";
+import { ArrowLeft, Bell, Calendar, ChevronDown, Clock, Compass, Filter, History, Home, MapPin, Search, User, Wrench, type SVGProps } from "lucide-react";
 
 export const Icons = {
   logo: (props: SVGProps<SVGSVGElement>) => (
@@ -71,4 +71,8 @@ export const Icons = {
       <line x1="12" x2="12.01" y1="16" y2="16" />
     </svg>
   ),
+  arrowLeft: ArrowLeft,
+  search: Search,
+  filter: Filter,
+  clock: Clock,
 };

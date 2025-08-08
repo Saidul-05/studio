@@ -1,6 +1,8 @@
+
 import HomeView from "@/components/home-view";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -26,14 +28,18 @@ export default function Home() {
 
       <footer className="sticky bottom-0 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl">
         <nav className="flex justify-around items-center p-2">
-          <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
-            <Icons.home className="h-6 w-6 mb-1" />
-            <span className="text-xs">Home</span>
-          </Button>
-          <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-            <Icons.wrench className="h-6 w-6 mb-1" />
-            <span className="text-xs">Services</span>
-          </Button>
+          <Link href="/" className="flex flex-col h-auto items-center text-primary">
+            <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
+              <Icons.home className="h-6 w-6 mb-1" />
+              <span className="text-xs">Home</span>
+            </Button>
+          </Link>
+          <Link href="/services" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+              <Icons.wrench className="h-6 w-6 mb-1" />
+              <span className="text-xs">Services</span>
+            </Button>
+          </Link>
           <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
             <Icons.compass className="h-6 w-6 mb-1" />
             <span className="text-xs">Explore</span>
