@@ -1,12 +1,25 @@
 
-import type {Metadata} from 'next';
+'use client';
+
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
-export const metadata: Metadata = {
-  title: 'ResQ Auto',
-  description: '24/7 Auto Assistance.',
-};
+function AuthWrapper({ children }: { children: React.ReactNode }) {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+}
+
 
 export default function RootLayout({
   children,
@@ -19,10 +32,16 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <title>ResQ Auto</title>
+        <meta name="description" content="24/7 Auto Assistance." />
       </head>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <AuthProvider>
+            <AuthWrapper>
+                <Toaster />
+                {children}
+            </AuthWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

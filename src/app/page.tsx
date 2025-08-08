@@ -1,23 +1,39 @@
 
+'use client';
+
 import { HomeView } from "@/components/home-view";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { signOutUser } from "@/lib/firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  const handleAuthAction = () => {
+    if (user) {
+      signOutUser();
+    } else {
+      router.push('/login');
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-secondary">
+    <div className="flex flex-col min-h-screen bg-background">
       <header className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 text-white">
         <div className="flex items-center gap-2">
           <Icons.logo className="h-8 w-8" />
-          <h1 className="text-xl font-bold">ResQ Auto</h1>
+          <h1 className="text-xl font-bold">ResQNow</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon">
             <Icons.bell className="h-6 w-6" />
           </Button>
-          <Button variant="ghost" className="bg-white/20 hover:bg-white/30">
-            Sign In
+          <Button variant="ghost" className="bg-white/20 hover:bg-white/30" onClick={handleAuthAction} disabled={loading}>
+            {loading ? '...' : user ? 'Sign Out' : 'Sign In'}
           </Button>
         </div>
       </header>
@@ -26,10 +42,10 @@ export default function Home() {
         <HomeView />
       </main>
 
-      <footer className="sticky bottom-0 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl">
+      <footer className="sticky bottom-0 bg-card shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl">
         <nav className="flex justify-around items-center p-2">
-          <Link href="/" className="flex flex-col h-auto items-center text-primary">
-            <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
+          <Link href="/" className="flex flex-col h-auto items-center text-accent">
+            <Button variant="ghost" className="flex flex-col h-auto items-center text-accent">
               <Icons.home className="h-6 w-6 mb-1" />
               <span className="text-xs">Home</span>
             </Button>

@@ -1,5 +1,5 @@
 
-import { ArrowLeft, Bell, Calendar, Car, ChevronDown, ChevronRight, Clock, Compass, CreditCard, DollarSign, Filter, Fuel, Headset, Heart, History, Home, LayoutDashboard, List, LogOut, MapPin, Moon, MoreHorizontal, Pencil, Search, Settings, Shield, Star, User, UserCog, Users, Wrench, X, type SVGProps } from "lucide-react";
+import { ArrowLeft, Bell, Calendar, Car, CheckCircle, ChevronDown, ChevronRight, Clock, Compass, CreditCard, DollarSign, Download, Filter, Fuel, Headset, Heart, History, Home, LayoutDashboard, List, LogOut, MapPin, Moon, MoreHorizontal, Pencil, Search, Settings, Shield, Star, User, UserCog, Users, Wrench, X, type SVGProps } from "lucide-react";
 
 export const Icons = {
   logo: (props: SVGProps<SVGSVGElement>) => (
@@ -51,6 +51,8 @@ export const Icons = {
   userCog: UserCog,
   shield: Shield,
   moreHorizontal: MoreHorizontal,
+  checkCircle: CheckCircle,
+  download: Download,
   sliders: (props: SVGProps<SVGSVGElement>) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -6,9 +6,9 @@ import { Icons } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import Link from 'next/link';
+import withAuth from '@/components/withAuth';
 import React from 'react';
 
 const initialNewRequests = [
@@ -73,7 +73,7 @@ type Job = {
     iconBg: string;
 };
 
-export default function ProviderDashboardPage() {
+function ProviderDashboardPage() {
     const [newRequests, setNewRequests] = React.useState<Job[]>(initialNewRequests);
     const [activeJobs, setActiveJobs] = React.useState<Job[]>(initialActiveJobs);
     const [selectedRequest, setSelectedRequest] = React.useState<Job | null>(null);
@@ -89,150 +89,146 @@ export default function ProviderDashboardPage() {
 
   return (
     <Dialog onOpenChange={(open) => !open && setSelectedRequest(null)}>
-      <div className="flex flex-col min-h-screen bg-gray-50">
-        <header className="sticky top-0 bg-white shadow-sm z-10 p-4">
-          <div className="flex items-center justify-between">
-            <div className='flex items-center gap-2'>
-              <Icons.logo className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold">Provider Dashboard</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon">
-                <Icons.bell className="h-6 w-6" />
-              </Button>
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="provider portrait" />
-                <AvatarFallback>P</AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-        </header>
-
-        <main className="flex-grow p-4 space-y-6">
-          <div>
-              <h2 className="text-xl font-bold mb-4">New Service Requests</h2>
-              {newRequests.length > 0 ? (
-                <div className="space-y-4">
-                  {newRequests.map((item) => (
-                      <Card key={item.id} className="p-4 shadow-md rounded-xl bg-white">
-                          <div className="flex gap-4">
-                              <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
-                                  {item.icon}
-                              </div>
-                              <div className="flex-grow">
-                                  <div className="flex justify-between items-start">
-                                      <h3 className="font-bold">{item.service}</h3>
-                                      <p className="text-sm font-medium">{item.time}</p>
-                                  </div>
-                                  <p className="text-sm text-gray-500">{item.location}</p>
-                              </div>
-                          </div>
-                          <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                  <Avatar className="h-8 w-8">
-                                      <AvatarImage src={item.customerAvatar} data-ai-hint="customer portrait"/>
-                                      <AvatarFallback>{item.customerName.charAt(0)}</AvatarFallback>
-                                  </Avatar>
-                                  <span className="text-sm font-medium">{item.customerName}</span>
-                              </div>
-                               <DialogTrigger asChild>
-                                  <Button size="sm" onClick={() => setSelectedRequest(item)}>Assign Mechanic</Button>
-                               </DialogTrigger>
-                          </div>
-                      </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card className='p-4 text-center text-gray-500 bg-gray-100'>
-                    No new service requests.
+        <div className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                        <Icons.dollarSign className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">$12,450.50</div>
+                        <p className="text-xs text-muted-foreground">+15.2% from last month</p>
+                    </CardContent>
                 </Card>
-              )}
-          </div>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Total Jobs</CardTitle>
+                        <Icons.wrench className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">+450</div>
+                        <p className="text-xs text-muted-foreground">+8.5% from last month</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Active Mechanics</CardTitle>
+                        <Icons.userCog className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">12 / 15</div>
+                        <p className="text-xs text-muted-foreground">3 mechanics available</p>
+                    </CardContent>
+                </Card>
+            </div>
 
-          <div>
-              <h2 className="text-xl font-bold mb-4">Active Jobs</h2>
-               {activeJobs.length > 0 ? (
-                    <div className="space-y-4">
-                    {activeJobs.map((item) => (
-                        <Card key={item.id} className="p-4 shadow-md rounded-xl bg-white">
-                        <div className="flex gap-4">
-                            <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
-                            {item.icon}
-                            </div>
-                            <div className="flex-grow">
-                                <div className="flex justify-between items-start">
-                                    <h3 className="font-bold">{item.service}</h3>
-                                    <Badge variant={item.status === 'En Route' ? 'default' : 'secondary'}
-                                        className={
-                                            item.status === 'En Route'
-                                            ? 'bg-blue-100 text-blue-800'
-                                            : item.status === 'Assigned'
-                                            ? 'bg-yellow-100 text-yellow-800'
-                                            : ''
-                                        }
-                                    >{item.status}</Badge>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>New Service Requests</CardTitle>
+                        <CardDescription>Assign these requests to available mechanics.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                    {newRequests.length > 0 ? (
+                        <div className="space-y-4">
+                        {newRequests.map((item) => (
+                            <Card key={item.id} className="p-4 shadow-sm">
+                                <div className="flex gap-4">
+                                    <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
+                                        {item.icon}
+                                    </div>
+                                    <div className="flex-grow">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="font-bold">{item.service}</h3>
+                                            <p className="text-sm font-medium">{item.time}</p>
+                                        </div>
+                                        <p className="text-sm text-gray-500">{item.location}</p>
+                                    </div>
                                 </div>
-                                <p className="text-sm text-gray-500">{item.location}</p>
-                            </div>
+                                <div className="mt-3 pt-3 border-t flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage src={item.customerAvatar} data-ai-hint="customer portrait"/>
+                                            <AvatarFallback>{item.customerName.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-sm font-medium">{item.customerName}</span>
+                                    </div>
+                                    <DialogTrigger asChild>
+                                        <Button size="sm" onClick={() => setSelectedRequest(item)}>Assign Mechanic</Button>
+                                    </DialogTrigger>
+                                </div>
+                            </Card>
+                        ))}
                         </div>
-                        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <p className='text-sm text-gray-500'>Customer:</p>
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src={item.customerAvatar} data-ai-hint="customer portrait"/>
-                                    <AvatarFallback>{item.customerName.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <span className="text-sm font-medium">{item.customerName}</span>
-                            </div>
-                             <div className="flex items-center gap-2">
-                                <p className='text-sm text-gray-500'>Mechanic:</p>
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src={item.mechanic?.avatar} data-ai-hint="mechanic portrait"/>
-                                    <AvatarFallback>{item.mechanic?.name.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <span className="text-sm font-medium">{item.mechanic?.name}</span>
-                            </div>
+                    ) : (
+                        <div className='p-4 text-center text-gray-500 bg-gray-100 rounded-md'>
+                            No new service requests.
                         </div>
-                        </Card>
-                    ))}
-                    </div>
-                ) : (
-                    <Card className='p-4 text-center text-gray-500 bg-gray-100'>
-                        No active jobs.
-                    </Card>
-                )}
-          </div>
-        </main>
-
-        <footer className="sticky bottom-0 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl z-20">
-          <nav className="flex justify-around items-center p-2">
-            <Link href="/provider" className="flex flex-col h-auto items-center text-primary">
-              <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
-                  <Icons.layoutDashboard className="h-6 w-6 mb-1" />
-                  <span className="text-xs">Dashboard</span>
-              </Button>
-            </Link>
-            <Link href="#" className="flex flex-col h-auto items-center text-muted-foreground">
-              <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-                  <Icons.users className="h-6 w-6 mb-1" />
-                  <span className="text-xs">Mechanics</span>
-              </Button>
-            </Link>
-             <Link href="#" className="flex flex-col h-auto items-center text-muted-foreground">
-                <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-                    <Icons.history className="h-6 w-6 mb-1" />
-                    <span className="text-xs">History</span>
-                </Button>
-            </Link>
-            <Link href="/profile" className="flex flex-col h-auto items-center text-muted-foreground">
-              <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-                <Icons.user className="h-6 w-6 mb-1" />
-                <span className="text-xs">Profile</span>
-              </Button>
-            </Link>
-          </nav>
-        </footer>
-      </div>
+                    )}
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Active Jobs</CardTitle>
+                        <CardDescription>Track the progress of ongoing services.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                    {activeJobs.length > 0 ? (
+                            <div className="space-y-4">
+                            {activeJobs.map((item) => (
+                                <Card key={item.id} className="p-4 shadow-sm">
+                                <div className="flex gap-4">
+                                    <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
+                                    {item.icon}
+                                    </div>
+                                    <div className="flex-grow">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="font-bold">{item.service}</h3>
+                                            <Badge variant={item.status === 'En Route' ? 'default' : 'secondary'}
+                                                className={
+                                                    item.status === 'En Route'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : item.status === 'Assigned'
+                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                    : ''
+                                                }
+                                            >{item.status}</Badge>
+                                        </div>
+                                        <p className="text-sm text-gray-500">{item.location}</p>
+                                    </div>
+                                </div>
+                                <div className="mt-3 pt-3 border-t grid grid-cols-2 gap-2">
+                                    <div className="flex items-center gap-2">
+                                        <p className='text-xs text-gray-500'>Customer:</p>
+                                        <Avatar className="h-6 w-6">
+                                            <AvatarImage src={item.customerAvatar} data-ai-hint="customer portrait"/>
+                                            <AvatarFallback>{item.customerName.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-xs font-medium">{item.customerName}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <p className='text-xs text-gray-500'>Mechanic:</p>
+                                        <Avatar className="h-6 w-6">
+                                            <AvatarImage src={item.mechanic?.avatar} data-ai-hint="mechanic portrait"/>
+                                            <AvatarFallback>{item.mechanic?.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-xs font-medium">{item.mechanic?.name}</span>
+                                    </div>
+                                </div>
+                                </Card>
+                            ))}
+                            </div>
+                        ) : (
+                            <div className='p-4 text-center text-gray-500 bg-gray-100 rounded-md'>
+                                No active jobs.
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
        {selectedRequest && (
         <AssignMechanicDialog
           request={selectedRequest}
@@ -243,3 +239,5 @@ export default function ProviderDashboardPage() {
     </Dialog>
   );
 }
+
+export default withAuth(ProviderDashboardPage);

@@ -10,6 +10,10 @@ import { Switch } from '@/components/ui/switch';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, {useRef, useState} from 'react';
+import withAuth from '@/components/withAuth';
+import { useAuth } from '@/hooks/useAuth';
+import { signOutUser } from '@/lib/firebase/auth';
+import { useRouter } from 'next/navigation';
 
 const quickActions = [
     { name: 'Vehicles', icon: <Icons.car className="h-6 w-6 text-primary" /> },
@@ -45,8 +49,10 @@ const recentServices = [
 ];
 
 
-export default function ProfilePage() {
-    const [avatarSrc, setAvatarSrc] = useState('https://placehold.co/100x100.png');
+function ProfilePage() {
+    const { user } = useAuth();
+    const router = useRouter();
+    const [avatarSrc, setAvatarSrc] = useState(user?.photoURL || 'https://placehold.co/100x100.png');
     const fileInputRef = useRef<HTMLInputElement>(null);
   
     const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +61,8 @@ export default function ProfilePage() {
         reader.onload = (e) => {
           if (e.target?.result) {
             setAvatarSrc(e.target.result as string);
+            // Here you would typically upload the image to a server
+            // and update the user's profileURL in Firebase Auth.
           }
         };
         reader.readAsDataURL(event.target.files[0]);
@@ -65,13 +73,18 @@ export default function ProfilePage() {
       fileInputRef.current?.click();
     };
 
+    const handleSignOut = async () => {
+        await signOutUser();
+        router.push('/login');
+    };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <header className="sticky top-0 bg-white shadow-sm z-10 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">Profile</h1>
-          <Button variant="ghost" size="icon">
-            <Icons.settings className="h-6 w-6" />
+          <Button variant="ghost" size="icon" onClick={handleSignOut}>
+            <Icons.logOut className="h-6 w-6" />
           </Button>
         </div>
       </header>
@@ -81,11 +94,11 @@ export default function ProfilePage() {
             <div className='flex items-center gap-4'>
                 <Avatar className="h-16 w-16">
                     <AvatarImage src={avatarSrc} data-ai-hint="person face" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>{user?.displayName?.charAt(0) || 'U'}</AvatarFallback>
                 </Avatar>
                 <div className='flex-grow'>
-                    <h2 className='font-bold text-lg'>James Davidson</h2>
-                    <p className='text-sm text-gray-500'>Premium Member</p>
+                    <h2 className='font-bold text-lg'>{user?.displayName || 'User'}</h2>
+                    <p className='text-sm text-gray-500'>{user?.email}</p>
                     <Badge className='mt-1 bg-blue-100 text-blue-800 border-blue-200'>Verified Account</Badge>
                 </div>
                 <input
@@ -237,3 +250,6 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+
+export default withAuth(ProfilePage);

@@ -53,8 +53,8 @@ export default function AdminServicesPage() {
                 <TableCell>{service.category}</TableCell>
                 <TableCell>{service.priceRange}</TableCell>
                 <TableCell>
-                  <Badge variant={service.status === 'Active' ? 'default' : 'destructive'}  
-                    className={service.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
+                  <Badge variant={service.status === 'Active' ? 'default' : 'destructive'}
+                    className={service.status === 'Active' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}
                   >
                     {service.status}
                   </Badge>

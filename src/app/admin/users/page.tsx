@@ -51,8 +51,8 @@ export default function AdminUsersPage() {
                 </TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell>
-                  <Badge variant={user.status === 'Active' ? 'default' : 'destructive'}  
-                    className={user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
+                  <Badge variant={user.status === 'Active' ? 'default' : 'destructive'}
+                    className={user.status === 'Active' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}
                   >
                     {user.status}
                   </Badge>

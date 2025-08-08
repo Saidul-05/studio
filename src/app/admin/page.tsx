@@ -22,11 +22,11 @@ const chartData = [
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--primary))",
+    color: "hsl(var(--accent))",
   },
   mobile: {
     label: "Mobile",
-    color: "hsl(var(--secondary))",
+    color: "hsl(var(--primary))",
   },
 }
 
@@ -41,12 +41,6 @@ const recentBookings = [
 export default function AdminDashboard() {
   return (
     <div className="space-y-6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Dashboard</CardTitle>
-                <CardDescription>An overview of your auto rescue service platform.</CardDescription>
-            </CardHeader>
-        </Card>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -136,15 +130,15 @@ export default function AdminDashboard() {
                                         <div className="text-sm text-muted-foreground">{booking.customer}</div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge 
+                                        <Badge
                                             variant={
                                                 booking.status === 'Completed' ? 'default' :
                                                 booking.status === 'In Progress' ? 'secondary' :
                                                 booking.status === 'Canceled' ? 'destructive' : 'outline'
                                             }
                                             className={
-                                                booking.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                                                booking.status === 'In Progress' ? 'bg-blue-100 text-blue-800' : ''
+                                                booking.status === 'Completed' ? 'bg-green-500/20 text-green-300' :
+                                                booking.status === 'In Progress' ? 'bg-blue-500/20 text-blue-300' : ''
                                             }
                                         >
                                             {booking.status}

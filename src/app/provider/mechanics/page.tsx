@@ -4,25 +4,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { MoreHorizontal, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
+import withAuth from '@/components/withAuth';
 
 const mechanics = [
   { id: 'mech1', name: 'Michael Chen', avatar: 'https://placehold.co/100x100.png', rating: 4.9, onJob: false, totalJobs: 125, since: '2023-03-10' },
   { id: 'mech2', name: 'David Rodriguez', avatar: 'https://placehold.co/100x100.png', rating: 4.8, onJob: true, totalJobs: 98, since: '2023-04-01' },
   { id: 'mech3', name: 'Chris Lee', avatar: 'https://placehold.co/100x100.png', rating: 4.7, onJob: false, totalJobs: 150, since: '2023-05-15' },
-  { id: 'mech4', name: 'Robert Chen', avatar: 'https://placehold.co/100x100.png', rating: 4.8, onJob: false, totalJobs: 82, since: '2023-05-22' },
 ];
 
-export default function AdminMechanicsPage() {
+function ProviderMechanicsPage() {
   return (
      <Card>
       <CardHeader>
          <div className="flex justify-between items-center">
             <div>
-                <CardTitle>Mechanics</CardTitle>
-                <CardDescription>Manage all mechanics on the platform.</CardDescription>
+                <CardTitle>Your Mechanics</CardTitle>
+                <CardDescription>Manage your team of mechanics.</CardDescription>
             </div>
             <Button>Add New Mechanic</Button>
         </div>
@@ -36,7 +35,6 @@ export default function AdminMechanicsPage() {
               <TableHead>Total Jobs</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Member Since</TableHead>
-              <TableHead><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -66,22 +64,6 @@ export default function AdminMechanicsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>{mechanic.since}</TableCell>
-                 <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>View Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Details</DropdownMenuItem>
-                      <DropdownMenuItem>View Job History</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -90,3 +72,5 @@ export default function AdminMechanicsPage() {
     </Card>
   );
 }
+
+export default withAuth(ProviderMechanicsPage);

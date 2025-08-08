@@ -3,11 +3,9 @@
 
 import { Icons } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Link from 'next/link';
 import React from 'react';
 
 const activeServices = [
@@ -33,17 +31,11 @@ const activeServices = [
   },
 ];
 
-const completedServices = [
-    {
-        customerName: 'Emily White',
-        customerAvatar: 'https://placehold.co/100x100.png',
-        service: 'Tire Change',
-        location: '789 Broadway, New York, NY',
-        date: 'Apr 24, 2025',
-        earnings: 55.00,
-        icon: <Icons.carTire className="h-6 w-6 text-white" />,
-        iconBg: 'bg-green-500',
-    }
+const stats = [
+    { title: "Today's Earnings", value: "$125.50", icon: <Icons.dollarSign className="h-6 w-6 text-muted-foreground" /> },
+    { title: "Active Jobs", value: "2", icon: <Icons.wrench className="h-6 w-6 text-muted-foreground" /> },
+    { title: "Completed Today", value: "3", icon: <Icons.checkCircle className="h-6 w-6 text-muted-foreground" /> },
+    { title: "Average Rating", value: "4.9", icon: <Icons.star className="h-6 w-6 text-muted-foreground" /> },
 ]
 
 export default function MechanicDashboardPage() {
@@ -57,31 +49,28 @@ export default function MechanicDashboardPage() {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="sticky top-0 bg-white shadow-sm z-10 p-4">
-        <div className="flex items-center justify-between">
-          <div className='flex items-center gap-2'>
-            <Icons.logo className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-bold">Mechanic Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <Icons.bell className="h-6 w-6" />
-            </Button>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="mechanic portrait" />
-              <AvatarFallback>M</AvatarFallback>
-            </Avatar>
-          </div>
+    <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {stats.map(stat => (
+                 <Card key={stat.title}>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                        {stat.icon}
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{stat.value}</div>
+                    </CardContent>
+                </Card>
+            ))}
         </div>
-      </header>
-
-      <main className="flex-grow p-4 space-y-6">
-        <div>
-            <h2 className="text-xl font-bold mb-4">Active Service Requests</h2>
-            <div className="space-y-4">
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>Active Service Requests</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
             {activeJobs.map((item, index) => (
-                <Card key={index} className="p-4 shadow-md rounded-xl bg-white">
+                <Card key={index} className="p-4 shadow-sm rounded-xl bg-card">
                     <div className="flex gap-4">
                         <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
                         {item.icon}
@@ -91,10 +80,10 @@ export default function MechanicDashboardPage() {
                                 <h3 className="font-bold">{item.service}</h3>
                                 <p className="text-sm font-medium">{item.time}</p>
                             </div>
-                            <p className="text-sm text-gray-500">{item.location}</p>
+                            <p className="text-sm text-muted-foreground">{item.location}</p>
                         </div>
                     </div>
-                     <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                     <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src={item.customerAvatar} data-ai-hint="customer portrait"/>
@@ -104,7 +93,7 @@ export default function MechanicDashboardPage() {
                         </div>
                         <div className="w-[140px]">
                             <Select value={item.status} onValueChange={(newStatus) => handleStatusChange(index, newStatus)}>
-                                <SelectTrigger className="w-full bg-gray-100 border-none">
+                                <SelectTrigger className="w-full bg-background border-border">
                                     <SelectValue placeholder="Update Status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -119,55 +108,8 @@ export default function MechanicDashboardPage() {
                     </div>
                 </Card>
             ))}
-            </div>
-        </div>
-
-        <div>
-            <h2 className="text-xl font-bold mb-4">Completed Services</h2>
-            <div className="space-y-4">
-            {completedServices.map((item, index) => (
-                <Card key={index} className="p-4 shadow-md rounded-xl bg-white">
-                <div className="flex items-center">
-                    <div className={`h-12 w-12 rounded-full flex items-center justify-center ${item.iconBg}`}>
-                        {item.icon}
-                    </div>
-                    <div className="flex-grow ml-4">
-                        <p className="font-semibold">{item.service}</p>
-                        <p className="text-sm text-gray-500">{item.customerName} - {item.date}</p>
-                    </div>
-                    <div className="text-right">
-                        <p className="font-bold text-lg text-green-600">+${item.earnings.toFixed(2)}</p>
-                        <p className="text-xs text-gray-500">Earnings</p>
-                    </div>
-                </div>
-                </Card>
-            ))}
-            </div>
-        </div>
-      </main>
-
-       <footer className="sticky bottom-0 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl z-20">
-        <nav className="flex justify-around items-center p-2">
-          <Link href="/mechanic" className="flex flex-col h-auto items-center text-primary">
-            <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
-                <Icons.layoutDashboard className="h-6 w-6 mb-1" />
-                <span className="text-xs">Dashboard</span>
-            </Button>
-          </Link>
-          <Link href="#" className="flex flex-col h-auto items-center text-muted-foreground">
-            <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-                <Icons.dollarSign className="h-6 w-6 mb-1" />
-                <span className="text-xs">Earnings</span>
-            </Button>
-          </Link>
-          <Link href="#" className="flex flex-col h-auto items-center text-muted-foreground">
-            <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-              <Icons.user className="h-6 w-6 mb-1" />
-              <span className="text-xs">Profile</span>
-            </Button>
-          </Link>
-        </nav>
-      </footer>
+            </CardContent>
+        </Card>
     </div>
   );
 }

@@ -46,16 +46,17 @@ export default function AdminBookingsPage() {
                 <TableCell>{booking.mechanic}</TableCell>
                 <TableCell>{booking.date}</TableCell>
                 <TableCell>
-                   <Badge 
+                   <Badge
                         variant={
                             booking.status === 'Completed' ? 'default' :
                             booking.status === 'In Progress' ? 'secondary' :
                             booking.status === 'Canceled' ? 'destructive' : 'outline'
                         }
                         className={
-                            booking.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                            booking.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                            booking.status === 'Scheduled' ? 'bg-yellow-100 text-yellow-800' : ''
+                            booking.status === 'Completed' ? 'bg-green-500/20 text-green-300' :
+                            booking.status === 'In Progress' ? 'bg-blue-500/20 text-blue-300' :
+                            booking.status === 'Scheduled' ? 'bg-yellow-500/20 text-yellow-300' :
+                            booking.status === 'Canceled' ? 'bg-red-500/20 text-red-300' : ''
                         }
                     >
                         {booking.status}

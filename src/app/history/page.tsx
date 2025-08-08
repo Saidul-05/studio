@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import React from 'react';
+import withAuth from '@/components/withAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 const serviceHistoryData = [
   {
@@ -78,10 +80,11 @@ const StarRating = ({ rating }: { rating: number }) => (
     </div>
   );
 
-export default function HistoryPage() {
+function HistoryPage() {
   const { toast } = useToast();
   const [timeFilter, setTimeFilter] = React.useState('all-time');
   const [serviceFilter, setServiceFilter] = React.useState('all-services');
+  const { user } = useAuth();
   
   const handleReview = () => {
     toast({
@@ -120,8 +123,8 @@ export default function HistoryPage() {
               <Icons.bell className="h-6 w-6" />
             </Button>
             <Avatar className="h-8 w-8">
-              <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="person face" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage src={user?.photoURL || "https://placehold.co/100x100.png"} data-ai-hint="person face" />
+              <AvatarFallback>{user?.displayName?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
           </div>
         </div>
@@ -244,3 +247,5 @@ export default function HistoryPage() {
     </div>
   );
 }
+
+export default withAuth(HistoryPage);

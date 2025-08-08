@@ -9,16 +9,14 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import withAuth from "@/components/withAuth";
 
-const adminNavItems = [
-    { href: "/admin", icon: <Icons.layoutDashboard />, label: "Dashboard" },
-    { href: "/admin/users", icon: <Icons.users />, label: "Users" },
-    { href: "/admin/services", icon: <Icons.wrench />, label: "Services" },
-    { href: "/admin/bookings", icon: <Icons.calendar />, label: "Bookings" },
-    { href: "/admin/mechanics", icon: <Icons.userCog />, label: "Mechanics" },
-    { href: "/admin/settings", icon: <Icons.settings />, label: "Settings" },
+const mechanicNavItems = [
+    { href: "/mechanic", icon: <Icons.layoutDashboard />, label: "Dashboard" },
+    { href: "/mechanic/history", icon: <Icons.history />, label: "Job History" },
+    { href: "/mechanic/earnings", icon: <Icons.dollarSign />, label: "Earnings" },
+    { href: "/mechanic/profile", icon: <Icons.user />, label: "Profile" },
 ];
 
-function AdminLayout({
+function MechanicLayout({
   children,
 }: {
   children: React.ReactNode
@@ -31,12 +29,12 @@ function AdminLayout({
             <SidebarHeader>
                 <div className="flex items-center gap-2">
                     <Icons.logo className="h-8 w-8 text-primary" />
-                    <span className="text-lg font-bold">ResQ Admin</span>
+                    <span className="text-lg font-bold">Mechanic Panel</span>
                 </div>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
-                    {adminNavItems.map((item) => (
+                    {mechanicNavItems.map((item) => (
                         <SidebarMenuItem key={item.href}>
                              <Link href={item.href} passHref>
                                 <SidebarMenuButton isActive={pathname === item.href}>
@@ -51,15 +49,15 @@ function AdminLayout({
              <SidebarFooter>
                 <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="admin portrait" />
-                        <AvatarFallback>A</AvatarFallback>
+                        <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="mechanic portrait" />
+                        <AvatarFallback>M</AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                        <p className="text-sm font-semibold">Admin User</p>
-                        <p className="text-xs text-muted-foreground">admin@resq.auto</p>
+                        <p className="text-sm font-semibold">Mechanic User</p>
+                        <p className="text-xs text-muted-foreground">mechanic@resq.auto</p>
                     </div>
                      <Link href="/" passHref>
-                        <Button variant="ghost" size="icon" title="Exit Admin Panel">
+                        <Button variant="ghost" size="icon" title="Exit Panel">
                            <Icons.logOut className="h-5 w-5" />
                         </Button>
                     </Link>
@@ -83,4 +81,4 @@ function AdminLayout({
   )
 }
 
-export default withAuth(AdminLayout);
+export default withAuth(MechanicLayout);
