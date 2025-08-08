@@ -52,10 +52,12 @@ export default function Home() {
                 <span className="text-xs">History</span>
             </Button>
           </Link>
-           <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
-            <Icons.user className="h-6 w-6 mb-1" />
-            <span className="text-xs">Profile</span>
-          </Button>
+           <Link href="/profile" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+              <Icons.user className="h-6 w-6 mb-1" />
+              <span className="text-xs">Profile</span>
+            </Button>
+          </Link>
         </nav>
       </footer>
     </div>
