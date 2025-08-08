@@ -1,5 +1,5 @@
 
-import { ArrowLeft, Bell, Calendar, Car, ChevronDown, Clock, Compass, CreditCard, Filter, Headset, Heart, History, Home, List, MapPin, Moon, Pencil, Search, Settings, Star, User, Wrench, type SVGProps } from "lucide-react";
+import { ArrowLeft, Bell, Calendar, Car, ChevronDown, Clock, Compass, CreditCard, Filter, Headset, Heart, History, Home, List, MapPin, Moon, Pencil, Search, Settings, Star, User, Wrench, X, type SVGProps } from "lucide-react";
 
 export const Icons = {
   logo: (props: SVGProps<SVGSVGElement>) => (
@@ -245,4 +245,5 @@ export const Icons = {
         <path d="m9 12 2 2 4-4"/>
     </svg>
   ),
+  close: X,
 };
