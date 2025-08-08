@@ -169,6 +169,14 @@ export default function ProfilePage() {
                 </div>
                 <Switch />
             </div>
+             <Link href="/mechanic" className="w-full">
+                <div className="flex items-center justify-between py-2 mt-2">
+                    <div className="flex items-center gap-3">
+                        <Icons.layoutDashboard className="h-5 w-5 text-gray-600"/>
+                        <span className="font-medium">Mechanic Dashboard</span>
+                    </div>
+                </div>
+            </Link>
         </Card>
 
       </main>
