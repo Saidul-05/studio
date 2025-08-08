@@ -194,4 +194,55 @@ export const Icons = {
         <line x1="7.05" y1="7.05" x2="5.64" y2="5.64" />
      </svg>
   ),
+  info: (props: SVGProps<SVGSVGElement>) => (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}>
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+  ),
+  bill: (props: SVGProps<SVGSVGElement>) => (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}>
+        <path d="M16 3H8C6.34 3 5 4.34 5 6v12c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3z"/>
+        <line x1="8" y1="9" x2="16" y2="9"/>
+        <line x1="8" y1="13" x2="16" y2="13"/>
+        <line x1="11" y1="17" x2="13" y2="17"/>
+    </svg>
+  ),
+  shieldCheck: (props: SVGProps<SVGSVGElement>) => (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+    </svg>
+  ),
 };

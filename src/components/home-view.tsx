@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { Icons } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
+import Link from "next/link";
 
 const emergencyServices = [
     { name: "Towing Service", price: 75, icon: "/tow-truck.png", hint: "tow truck" },
@@ -41,10 +43,12 @@ export default function HomeView() {
             <Icons.target className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         </div>
 
-        <Button className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-bold text-base">
-          <Icons.alertCircle className="mr-2 h-5 w-5" />
-          Request Emergency Assistance
-        </Button>
+        <Link href="/confirm-emergency" className="w-full">
+          <Button className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-bold text-base">
+            <Icons.alertCircle className="mr-2 h-5 w-5" />
+            Request Emergency Assistance
+          </Button>
+        </Link>
 
         <div className="grid grid-cols-2 gap-4">
           <Card className="p-4 flex flex-col items-start shadow-md">
