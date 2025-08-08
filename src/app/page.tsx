@@ -1,64 +1,52 @@
-"use client";
-
-import { useState } from "react";
-import LandingView from "@/components/landing-view";
-import RequestForm from "@/components/request-form";
-import TrackingView from "@/components/tracking-view";
+import HomeView from "@/components/home-view";
 import { Icons } from "@/components/icons";
-
-type FlowState = "idle" | "requesting" | "tracking";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const [flowState, setFlowState] = useState<FlowState>("idle");
-  const [requestDetails, setRequestDetails] = useState({
-    service: "",
-    eta: 0,
-  });
-
-  const handleRequestHelp = () => {
-    setFlowState("requesting");
-  };
-
-  const handleRequestComplete = (service: string, eta: number) => {
-    setRequestDetails({ service, eta });
-    setFlowState("tracking");
-  };
-
-  const handleBackToHome = () => {
-    setFlowState("idle");
-  };
-
-  const renderContent = () => {
-    switch (flowState) {
-      case "requesting":
-        return <RequestForm onComplete={handleRequestComplete} onBack={handleBackToHome} />;
-      case "tracking":
-        return (
-          <TrackingView
-            service={requestDetails.service}
-            eta={requestDetails.eta}
-            onNewRequest={handleBackToHome}
-          />
-        );
-      case "idle":
-      default:
-        return <LandingView onRequestHelp={handleRequestHelp} />;
-    }
-  };
-
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <header className="p-4 flex items-center justify-between border-b border-border/20">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={handleBackToHome}>
-          <Icons.logo className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold text-foreground">ResQNow</h1>
+    <div className="flex flex-col min-h-screen bg-secondary">
+      <header className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 text-white">
+        <div className="flex items-center gap-2">
+          <Icons.logo className="h-8 w-8" />
+          <h1 className="text-xl font-bold">ResQ Auto</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon">
+            <Icons.bell className="h-6 w-6" />
+          </Button>
+          <Button variant="ghost" className="bg-white/20 hover:bg-white/30">
+            Sign In
+          </Button>
         </div>
       </header>
-      <main className="flex-grow flex items-center justify-center p-4">
-        {renderContent()}
+
+      <main className="flex-grow">
+        <HomeView />
       </main>
-      <footer className="text-center p-4 text-muted-foreground text-sm">
-        © {new Date().getFullYear()} ResQNow. All rights reserved.
+
+      <footer className="sticky bottom-0 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.1)] rounded-t-2xl">
+        <nav className="flex justify-around items-center p-2">
+          <Button variant="ghost" className="flex flex-col h-auto items-center text-primary">
+            <Icons.home className="h-6 w-6 mb-1" />
+            <span className="text-xs">Home</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Icons.wrench className="h-6 w-6 mb-1" />
+            <span className="text-xs">Services</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Icons.compass className="h-6 w-6 mb-1" />
+            <span className="text-xs">Explore</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Icons.history className="h-6 w-6 mb-1" />
+            <span className="text-xs">History</span>
+          </Button>
+           <Button variant="ghost" className="flex flex-col h-auto items-center text-muted-foreground">
+            <Icons.user className="h-6 w-6 mb-1" />
+            <span className="text-xs">Profile</span>
+          </Button>
+        </nav>
       </footer>
     </div>
   );
