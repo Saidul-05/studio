@@ -16,7 +16,7 @@ import React from 'react';
 export default function SignUpPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized } = useAuth();
+    const { isFirebaseInitialized, app } = useAuth();
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -24,9 +24,10 @@ export default function SignUpPage() {
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!app) return;
         setIsLoading(true);
         try {
-            await signUpWithEmail(email, password, name);
+            await signUpWithEmail(app, email, password, name);
             toast({
                 title: 'Success',
                 description: 'Your account has been created successfully. Please sign in.',

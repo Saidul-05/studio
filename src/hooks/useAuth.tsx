@@ -3,7 +3,6 @@
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
-import { onAuthStateChangeWrapper } from '@/lib/firebase/auth';
 import { getApps, initializeApp, getApp, FirebaseApp } from 'firebase/app';
 import { firebaseConfig } from '@/lib/firebase/config';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
@@ -20,6 +19,7 @@ interface AuthContextType {
   loading: boolean;
   role: UserRole | null;
   isFirebaseInitialized: boolean;
+  app: FirebaseApp | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -27,6 +27,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   role: null,
   isFirebaseInitialized: false,
+  app: null,
 });
 
 const determineRole = (email: string | null): UserRole => {
@@ -42,20 +43,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<UserRole | null>(null);
   const [isFirebaseInitialized, setFirebaseInitialized] = useState(false);
+  const [app, setApp] = useState<FirebaseApp | null>(null);
 
   useEffect(() => {
-    let app: FirebaseApp;
+    let appInstance: FirebaseApp;
     if (getApps().length === 0) {
-        app = initializeApp(firebaseConfig);
+        appInstance = initializeApp(firebaseConfig);
     } else {
-        app = getApp();
+        appInstance = getApp();
     }
+    setApp(appInstance);
     
-    const auth = getAuth(app);
+    const auth = getAuth(appInstance);
 
     if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
         try {
-            initializeAppCheck(app, {
+            initializeAppCheck(appInstance, {
                 provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
                 isTokenAutoRefreshEnabled: true,
             });
@@ -75,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, role, isFirebaseInitialized }}>
+    <AuthContext.Provider value={{ user, loading, role, isFirebaseInitialized, app }}>
       {children}
     </AuthContext.Provider>
   );

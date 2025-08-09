@@ -16,16 +16,17 @@ import React from 'react';
 export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized } = useAuth();
+    const { isFirebaseInitialized, app } = useAuth();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!app) return;
         setIsLoading(true);
         try {
-            await signInWithEmail(email, password);
+            await signInWithEmail(app, email, password);
             toast({
                 title: 'Success',
                 description: 'You have been signed in successfully.',

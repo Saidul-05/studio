@@ -16,15 +16,16 @@ import React from 'react';
 export default function ForgotPasswordPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized } = useAuth();
+    const { isFirebaseInitialized, app } = useAuth();
     const [email, setEmail] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handlePasswordReset = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!app) return;
         setIsLoading(true);
         try {
-            await sendPasswordReset(email);
+            await sendPasswordReset(app, email);
             toast({
                 title: 'Password Reset Email Sent',
                 description: 'Please check your inbox for instructions to reset your password.',
