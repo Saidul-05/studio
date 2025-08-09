@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { signInWithEmail } from '@/lib/firebase/auth';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ import React from 'react';
 export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { isFirebaseInitialized } = useAuth();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
@@ -63,7 +65,7 @@ export default function LoginPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading}
+                                disabled={isLoading || !isFirebaseInitialized}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -79,10 +81,10 @@ export default function LoginPage() {
                                 required 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading}
+                                disabled={isLoading || !isFirebaseInitialized}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading}>
+                        <Button type="submit" className="w-full" disabled={isLoading || !isFirebaseInitialized}>
                             {isLoading ? 'Signing In...' : 'Sign In'}
                         </Button>
                     </form>

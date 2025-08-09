@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { signUpWithEmail } from '@/lib/firebase/auth';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ import React from 'react';
 export default function SignUpPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { isFirebaseInitialized } = useAuth();
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -63,7 +65,7 @@ export default function SignUpPage() {
                                 required 
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                disabled={isLoading}
+                                disabled={isLoading || !isFirebaseInitialized}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -75,7 +77,7 @@ export default function SignUpPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading}
+                                disabled={isLoading || !isFirebaseInitialized}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -86,10 +88,10 @@ export default function SignUpPage() {
                                 required 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading}
+                                disabled={isLoading || !isFirebaseInitialized}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading}>
+                        <Button type="submit" className="w-full" disabled={isLoading || !isFirebaseInitialized}>
                             {isLoading ? 'Creating Account...' : 'Create Account'}
                         </Button>
                     </form>
