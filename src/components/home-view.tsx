@@ -26,7 +26,6 @@ export function HomeView() {
   const router = useRouter();
   const { toast } = useToast();
   const [state, formAction, isPending] = useActionState(getSuggestions, { solutions: [] });
-  const [description, setDescription] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -38,29 +37,6 @@ export function HomeView() {
       });
     }
   }, [state, toast]);
-
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
-    // Check which button was clicked
-    const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
-
-    if (submitter && submitter.name === 'confirm-emergency') {
-        router.push('/confirm-emergency');
-    } else {
-        if (description.length < 10) {
-            toast({
-                title: 'Error',
-                description: 'Please provide a more detailed description.',
-                variant: 'destructive',
-            });
-            return;
-        }
-        formAction(formData);
-    }
-  }
 
   const hasSuggestions = state.solutions && state.solutions.length > 0;
 
@@ -93,20 +69,22 @@ export function HomeView() {
 
         <Card className="p-4 shadow-md bg-card">
             <h3 className="font-bold text-lg mb-2 text-center">Request Emergency Assistance</h3>
-            <form onSubmit={handleSubmit} ref={formRef} className="space-y-3">
+            <form action={formAction} ref={formRef} className="space-y-3">
                 <Textarea 
                     name="description"
                     placeholder="Describe your car problem... e.g., 'My car won't start and is making a clicking sound.'"
                     className="bg-background min-h-[80px]"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                    minLength={10}
                 />
 
                 {hasSuggestions ? (
-                     <Button type="submit" name="confirm-emergency" className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-bold text-base">
-                        <Icons.alertCircle className="mr-2 h-5 w-5" />
-                        Confirm Emergency
-                    </Button>
+                    <Link href="/confirm-emergency" className='block w-full'>
+                        <Button type="button" className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-bold text-base">
+                            <Icons.alertCircle className="mr-2 h-5 w-5" />
+                            Confirm Emergency
+                        </Button>
+                    </Link>
                 ) : (
                     <Button type="submit" name="get-suggestions" className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-bold text-base" disabled={isPending}>
                         <Icons.alertCircle className="mr-2 h-5 w-5" />
