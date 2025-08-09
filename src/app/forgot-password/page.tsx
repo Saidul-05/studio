@@ -16,16 +16,16 @@ import React from 'react';
 export default function ForgotPasswordPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized, app } = useAuth();
+    const { auth } = useAuth();
     const [email, setEmail] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handlePasswordReset = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!app) return;
+        if (!auth) return;
         setIsLoading(true);
         try {
-            await sendPasswordReset(app, email);
+            await sendPasswordReset(auth, email);
             toast({
                 title: 'Password Reset Email Sent',
                 description: 'Please check your inbox for instructions to reset your password.',
@@ -65,10 +65,10 @@ export default function ForgotPasswordPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading || !isFirebaseInitialized}>
+                        <Button type="submit" className="w-full" disabled={isLoading || !auth}>
                             {isLoading ? 'Sending Link...' : 'Send Reset Link'}
                         </Button>
                     </form>

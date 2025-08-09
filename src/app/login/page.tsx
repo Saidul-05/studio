@@ -16,17 +16,17 @@ import React from 'react';
 export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized, app } = useAuth();
+    const { auth } = useAuth();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!app) return;
+        if (!auth) return;
         setIsLoading(true);
         try {
-            await signInWithEmail(app, email, password);
+            await signInWithEmail(auth, email, password);
             toast({
                 title: 'Success',
                 description: 'You have been signed in successfully.',
@@ -66,7 +66,7 @@ export default function LoginPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -82,10 +82,10 @@ export default function LoginPage() {
                                 required 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading || !isFirebaseInitialized}>
+                        <Button type="submit" className="w-full" disabled={isLoading || !auth}>
                             {isLoading ? 'Signing In...' : 'Sign In'}
                         </Button>
                     </form>

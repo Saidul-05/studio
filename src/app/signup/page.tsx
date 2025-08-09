@@ -16,7 +16,7 @@ import React from 'react';
 export default function SignUpPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { isFirebaseInitialized, app } = useAuth();
+    const { auth } = useAuth();
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -24,10 +24,10 @@ export default function SignUpPage() {
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!app) return;
+        if (!auth) return;
         setIsLoading(true);
         try {
-            await signUpWithEmail(app, email, password, name);
+            await signUpWithEmail(auth, email, password, name);
             toast({
                 title: 'Success',
                 description: 'Your account has been created successfully. Please sign in.',
@@ -66,7 +66,7 @@ export default function SignUpPage() {
                                 required 
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -78,7 +78,7 @@ export default function SignUpPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -89,10 +89,10 @@ export default function SignUpPage() {
                                 required 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading || !isFirebaseInitialized}
+                                disabled={isLoading || !auth}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading || !isFirebaseInitialized}>
+                        <Button type="submit" className="w-full" disabled={isLoading || !auth}>
                             {isLoading ? 'Creating Account...' : 'Create Account'}
                         </Button>
                     </form>

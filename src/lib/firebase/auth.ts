@@ -9,34 +9,28 @@ import {
     onAuthStateChanged,
     updateProfile,
     type User,
-    getAuth,
-    FirebaseApp
+    type Auth,
 } from 'firebase/auth';
 
-export async function signUpWithEmail(app: FirebaseApp, email: string, password: string, displayName: string) {
-    const auth = getAuth(app);
+export async function signUpWithEmail(auth: Auth, email: string, password: string, displayName: string) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName });
     return userCredential.user;
 }
 
-export async function signInWithEmail(app: FirebaseApp, email: string, password: string) {
-    const auth = getAuth(app);
+export async function signInWithEmail(auth: Auth, email: string, password: string) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
 }
 
-export async function sendPasswordReset(app: FirebaseApp, email: string) {
-    const auth = getAuth(app);
+export async function sendPasswordReset(auth: Auth, email: string) {
     return sendPasswordResetEmail(auth, email);
 }
 
-export async function signOutUser(app: FirebaseApp) {
-    const auth = getAuth(app);
+export async function signOutUser(auth: Auth) {
     await signOut(auth);
 }
 
-export function onAuthStateChangeWrapper(app: FirebaseApp, callback: (user: User | null) => void) {
-    const auth = getAuth(app);
+export function onAuthStateChangeWrapper(auth: Auth, callback: (user: User | null) => void) {
     return onAuthStateChanged(auth, callback);
 }

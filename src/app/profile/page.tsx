@@ -50,7 +50,7 @@ const recentServices = [
 
 
 function ProfilePage() {
-    const { user, app } = useAuth();
+    const { user, auth } = useAuth();
     const router = useRouter();
     const [avatarSrc, setAvatarSrc] = useState(user?.photoURL || 'https://placehold.co/100x100.png');
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,8 +74,8 @@ function ProfilePage() {
     };
 
     const handleSignOut = async () => {
-        if (!app) return;
-        await signOutUser(app);
+        if (!auth) return;
+        await signOutUser(auth);
         router.push('/login');
     };
 

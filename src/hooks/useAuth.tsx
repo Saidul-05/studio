@@ -2,11 +2,10 @@
 'use client';
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { User, getAuth, onAuthStateChanged, Auth } from 'firebase/auth';
 import { getApps, initializeApp, getApp, FirebaseApp } from 'firebase/app';
 import { firebaseConfig } from '@/lib/firebase/config';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
-
 
 type UserRole = 'admin' | 'mechanic' | 'provider' | 'user';
 
@@ -18,7 +17,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   role: UserRole | null;
-  isFirebaseInitialized: boolean;
+  auth: Auth | null;
   app: FirebaseApp | null;
 }
 
@@ -26,7 +25,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   role: null,
-  isFirebaseInitialized: false,
+  auth: null,
   app: null,
 });
 
@@ -42,33 +41,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<UserRole | null>(null);
-  const [isFirebaseInitialized, setFirebaseInitialized] = useState(false);
+  const [auth, setAuth] = useState<Auth | null>(null);
   const [app, setApp] = useState<FirebaseApp | null>(null);
 
   useEffect(() => {
-    let appInstance: FirebaseApp;
-    if (getApps().length === 0) {
-        appInstance = initializeApp(firebaseConfig);
-    } else {
-        appInstance = getApp();
-    }
+    const appInstance = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    const authInstance = getAuth(appInstance);
     setApp(appInstance);
-    
-    const auth = getAuth(appInstance);
 
+    // Initialize App Check
     if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
-        try {
-            initializeAppCheck(appInstance, {
-                provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
-                isTokenAutoRefreshEnabled: true,
-            });
-        } catch (error) {
-            console.error("Error initializing App Check:", error);
-        }
+      try {
+        initializeAppCheck(appInstance, {
+          provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
+          isTokenAutoRefreshEnabled: true,
+        });
+      } catch (error) {
+        console.error("Error initializing App Check:", error);
+      }
     }
-    setFirebaseInitialized(true);
     
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setAuth(authInstance);
+    
+    const unsubscribe = onAuthStateChanged(authInstance, (user) => {
       setUser(user);
       setRole(determineRole(user?.email || null));
       setLoading(false);
@@ -78,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, role, isFirebaseInitialized, app }}>
+    <AuthContext.Provider value={{ user, loading, role, auth, app }}>
       {children}
     </AuthContext.Provider>
   );

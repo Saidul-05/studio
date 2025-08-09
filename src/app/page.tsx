@@ -10,12 +10,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { user, loading, app } = useAuth();
+  const { user, loading, auth } = useAuth();
   const router = useRouter();
 
   const handleAuthAction = () => {
-    if (user && app) {
-      signOutUser(app);
+    if (user && auth) {
+      signOutUser(auth);
     } else {
       router.push('/login');
     }
