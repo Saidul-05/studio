@@ -1,7 +1,7 @@
 
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarFooter } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarFooter, SidebarInset } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
@@ -63,7 +63,7 @@ function ProviderLayout({
                 </div>
             </SidebarFooter>
         </Sidebar>
-        <main className="md:pl-[var(--sidebar-width)] flex-1 transition-all group-data-[state=collapsed]/sidebar-wrapper:md:pl-[var(--sidebar-width-icon)]">
+        <SidebarInset>
             <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                  <SidebarTrigger className="md:hidden" />
                  <div className="flex items-center gap-2 ml-auto">
@@ -72,10 +72,10 @@ function ProviderLayout({
                     </Button>
                  </div>
             </header>
-            <div className="p-4 sm:px-6 sm:py-0 space-y-4">
+            <main className="p-4 sm:px-6 sm:py-0 space-y-4">
                 {children}
-            </div>
-        </main>
+            </main>
+        </SidebarInset>
     </SidebarProvider>
   )
 }

@@ -43,7 +43,7 @@ function ProviderMechanicsPage() {
                 <TableCell>
                     <div className="flex items-center gap-3">
                         <Avatar>
-                            <AvatarImage src={mechanic.avatar} />
+                            <AvatarImage src={mechanic.avatar} data-ai-hint="mechanic portrait" />
                             <AvatarFallback>{mechanic.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{mechanic.name}</span>
