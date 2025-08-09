@@ -7,28 +7,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { signInWithEmail } from '@/lib/firebase/auth';
+import { sendPasswordReset } from '@/lib/firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
-    const handleSignIn = async (e: React.FormEvent) => {
+    const handlePasswordReset = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await signInWithEmail(email, password);
+            await sendPasswordReset(email);
             toast({
-                title: 'Success',
-                description: 'You have been signed in successfully.',
+                title: 'Password Reset Email Sent',
+                description: 'Please check your inbox for instructions to reset your password.',
             });
-            router.push('/');
+            router.push('/login');
         } catch (error: any) {
             toast({
                 title: 'Error',
@@ -47,13 +46,13 @@ export default function LoginPage() {
                     <div className="flex items-center justify-center mb-4">
                         <Icons.logo className="h-10 w-10 text-primary" />
                     </div>
-                    <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+                    <CardTitle className="text-2xl text-center">Forgot Password</CardTitle>
                     <CardDescription className="text-center">
-                        Enter your credentials to access your account
+                        Enter your email to receive a reset link
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSignIn} className="grid gap-4">
+                    <form onSubmit={handlePasswordReset} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -66,30 +65,14 @@ export default function LoginPage() {
                                 disabled={isLoading}
                             />
                         </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
-                                <Link href="/forgot-password" className="ml-auto inline-block text-sm underline">
-                                    Forgot your password?
-                                </Link>
-                            </div>
-                            <Input 
-                                id="password" 
-                                type="password" 
-                                required 
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                disabled={isLoading}
-                            />
-                        </div>
                         <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading ? 'Signing In...' : 'Sign In'}
+                            {isLoading ? 'Sending Link...' : 'Send Reset Link'}
                         </Button>
                     </form>
                     <div className="mt-4 text-center text-sm">
-                        Don&apos;t have an account?{' '}
-                        <Link href="/signup" className="underline">
-                            Sign up
+                        Remember your password?{' '}
+                        <Link href="/login" className="underline">
+                            Sign in
                         </Link>
                     </div>
                 </CardContent>
