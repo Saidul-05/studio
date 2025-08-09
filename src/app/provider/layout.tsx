@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import withAuth from "@/components/withAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const providerNavItems = [
     { href: "/provider", icon: <Icons.layoutDashboard />, label: "Dashboard" },
@@ -21,6 +22,7 @@ function ProviderLayout({
   children: React.ReactNode
 }) {
     const pathname = usePathname();
+    const { user } = useAuth();
 
   return (
     <SidebarProvider>
@@ -49,11 +51,11 @@ function ProviderLayout({
                 <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="provider portrait" />
-                        <AvatarFallback>P</AvatarFallback>
+                        <AvatarFallback>{user?.displayName?.charAt(0) || 'P'}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                        <p className="text-sm font-semibold">Provider User</p>
-                        <p className="text-xs text-muted-foreground">provider@resq.auto</p>
+                        <p className="text-sm font-semibold">{user?.displayName || 'Provider User'}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                      <Link href="/" passHref>
                         <Button variant="ghost" size="icon" title="Exit Provider Panel">

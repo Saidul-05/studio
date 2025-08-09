@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import withAuth from "@/components/withAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const mechanicNavItems = [
     { href: "/mechanic", icon: <Icons.layoutDashboard />, label: "Dashboard" },
@@ -22,6 +23,7 @@ function MechanicLayout({
   children: React.ReactNode
 }) {
     const pathname = usePathname();
+    const { user } = useAuth();
 
   return (
     <SidebarProvider>
@@ -50,11 +52,11 @@ function MechanicLayout({
                 <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="mechanic portrait" />
-                        <AvatarFallback>M</AvatarFallback>
+                        <AvatarFallback>{user?.displayName?.charAt(0) || 'M'}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                        <p className="text-sm font-semibold">Mechanic User</p>
-                        <p className="text-xs text-muted-foreground">mechanic@resq.auto</p>
+                        <p className="text-sm font-semibold">{user?.displayName || 'Mechanic User'}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                      <Link href="/" passHref>
                         <Button variant="ghost" size="icon" title="Exit Panel">

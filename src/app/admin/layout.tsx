@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import withAuth from "@/components/withAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const adminNavItems = [
     { href: "/admin", icon: <Icons.layoutDashboard />, label: "Dashboard" },
@@ -24,6 +25,7 @@ function AdminLayout({
   children: React.ReactNode
 }) {
     const pathname = usePathname();
+    const { user } = useAuth();
 
   return (
     <SidebarProvider>
@@ -52,11 +54,11 @@ function AdminLayout({
                 <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="admin portrait" />
-                        <AvatarFallback>A</AvatarFallback>
+                        <AvatarFallback>{user?.displayName?.charAt(0) || 'A'}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                        <p className="text-sm font-semibold">Admin User</p>
-                        <p className="text-xs text-muted-foreground">admin@resq.auto</p>
+                        <p className="text-sm font-semibold">{user?.displayName || 'Admin User'}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                      <Link href="/" passHref>
                         <Button variant="ghost" size="icon" title="Exit Admin Panel">

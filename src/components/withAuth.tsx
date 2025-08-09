@@ -2,20 +2,33 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { Skeleton } from './ui/skeleton';
 
 const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
   const AuthComponent = (props: P) => {
-    const { user, loading } = useAuth();
+    const { user, loading, role } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
-      if (!loading && !user) {
+      if (loading) return;
+
+      if (!user) {
         router.push('/login');
+        return;
       }
-    }, [user, loading, router]);
+
+      if (pathname.startsWith('/admin') && role !== 'admin') {
+        router.push('/');
+      } else if (pathname.startsWith('/mechanic') && role !== 'mechanic') {
+        router.push('/');
+      } else if (pathname.startsWith('/provider') && role !== 'provider') {
+        router.push('/');
+      }
+
+    }, [user, loading, role, router, pathname]);
 
     if (loading || !user) {
       return (
