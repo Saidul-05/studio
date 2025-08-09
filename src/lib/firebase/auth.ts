@@ -10,7 +10,7 @@ import {
     updateProfile,
     type User
 } from 'firebase/auth';
-import { auth } from './config';
+import { auth } from './clientApp';
 
 export async function signUpWithEmail(email: string, password: string, displayName: string) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
