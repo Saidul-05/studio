@@ -49,16 +49,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const authInstance = getAuth(appInstance);
     setApp(appInstance);
 
-    // Initialize App Check
-    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
-      try {
-        initializeAppCheck(appInstance, {
-          provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
-          isTokenAutoRefreshEnabled: true,
-        });
-      } catch (error) {
-        console.error("Error initializing App Check:", error);
-      }
+    if (typeof window !== 'undefined') {
+        if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+            try {
+                initializeAppCheck(appInstance, {
+                    provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
+                    isTokenAutoRefreshEnabled: true,
+                });
+            } catch (error) {
+                console.error("Error initializing App Check:", error);
+            }
+        }
     }
     
     setAuth(authInstance);

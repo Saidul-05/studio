@@ -7,7 +7,6 @@ import { z } from "zod";
 
 const SuggestSolutionsInputSchema = z.object({
   description: z.string().min(10, "Please provide a more detailed description."),
-  intent: z.enum(["get-suggestions", "confirm-emergency"]),
 });
 
 type SuggestionsState = {
@@ -21,7 +20,6 @@ export async function getSuggestions(
 ): Promise<SuggestionsState> {
   const validatedFields = SuggestSolutionsInputSchema.safeParse({
     description: formData.get("description"),
-    intent: formData.get("intent"),
   });
 
   if (!validatedFields.success) {
@@ -30,7 +28,8 @@ export async function getSuggestions(
     };
   }
   
-  const { intent, description } = validatedFields.data;
+  const { description } = validatedFields.data;
+  const intent = formData.get('intent');
 
   if (intent === "confirm-emergency") {
     redirect("/confirm-emergency");

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { HomeView } from "@/components/home-view";
+import { HomeView } from "@/app/home-view";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";

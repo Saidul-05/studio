@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { signInWithEmail } from '@/lib/firebase/auth';
+import { signInWithEmail, signInWithGoogle } from '@/lib/firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -27,6 +27,27 @@ export default function LoginPage() {
         setIsLoading(true);
         try {
             await signInWithEmail(auth, email, password);
+            toast({
+                title: 'Success',
+                description: 'You have been signed in successfully.',
+            });
+            router.push('/');
+        } catch (error: any) {
+            toast({
+                title: 'Error',
+                description: error.message,
+                variant: 'destructive',
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleSignIn = async () => {
+        if (!auth) return;
+        setIsLoading(true);
+        try {
+            await signInWithGoogle(auth);
             toast({
                 title: 'Success',
                 description: 'You have been signed in successfully.',
@@ -87,6 +108,10 @@ export default function LoginPage() {
                         </div>
                         <Button type="submit" className="w-full" disabled={isLoading || !auth}>
                             {isLoading ? 'Signing In...' : 'Sign In'}
+                        </Button>
+                         <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || !auth}>
+                            <Icons.google className="mr-2 h-4 w-4" />
+                            Sign in with Google
                         </Button>
                     </form>
                     <div className="mt-4 text-center text-sm">
